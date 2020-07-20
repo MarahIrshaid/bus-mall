@@ -1,3 +1,4 @@
+
 'use strict';
 
 var productsSection = document.getElementById('allProducts');
@@ -8,8 +9,9 @@ var totalClicks = 0;
 var leftImageIndex;
 var middleImageIndex;
 var rightImageIndex;
-
-
+var productsName = [];
+allProducts.lastShown = [];
+var array1=[];
 
 function Product(name, path){
     this.name = name;
@@ -18,6 +20,7 @@ function Product(name, path){
     this.numberOfClicks = 0;
     this.numberOfTimesShown = 0;
     allProducts.push(this);
+    productsName.push(this.name);
  }
 
  new Product('Bag', 'img/bag.jpg');
@@ -43,6 +46,7 @@ function Product(name, path){
  generateRandomImage();
 
 ////////////////////
+
  productsSection.addEventListener('click', productClickHandler)
 
 
@@ -57,13 +61,24 @@ function Product(name, path){
      leftImageIndex = generateRandomNumber();
      middleImageIndex = generateRandomNumber();
      rightImageIndex = generateRandomNumber();
- 
-     while (leftImageIndex === rightImageIndex || leftImageIndex === middleImageIndex || rightImageIndex === middleImageIndex ){
-         rightImageIndex = generateRandomNumber(); 
+///////////// trying to make a boolean
+     var num = array1.includes(rightImageIndex);
+     var n = num.toString();
+    console.log(array1);
+
+     while (leftImageIndex === rightImageIndex || leftImageIndex === middleImageIndex || rightImageIndex === middleImageIndex  || array1.includes(leftImageIndex)
+     || array1.includes(middleImageIndex)
+     ||array1.includes(rightImageIndex)){
+        console.log ('Duplicate seen');
+      
+        
+        rightImageIndex = generateRandomNumber(); 
          middleImageIndex = generateRandomNumber();
          leftImageIndex = generateRandomNumber(); 
-
+         
      }
+
+   
      var leftPath = allProducts[leftImageIndex].path;
      var middlePath = allProducts[middleImageIndex].path;
      var rightPath = allProducts[rightImageIndex].path;
@@ -73,7 +88,24 @@ function Product(name, path){
      allProducts[middleImageIndex].numberOfTimesShown += 1;
 
      
- 
+     array1[0] = rightImageIndex;
+     array1[1] = leftImageIndex;
+     array1[2] = middleImageIndex;
+     console.log(array1+' yes')
+     
+    //  var namy =[];
+    //  var namy2=[];
+    //  namy.push( allProducts[leftImageIndex].name);
+    // //  var namy= allProducts[leftImageIndex].name;
+    //  console.log(namy + 'me')
+    // namy2.push(allProducts[leftImageIndex].name);
+    
+    //  if (namy===namy2) {
+    //     leftImageIndex = generateRandomNumber(); 
+         
+    //  }
+
+
      leftImage.setAttribute('src', leftPath);
      middleImage.setAttribute('src', middlePath);
      rightImage.setAttribute('src', rightPath);
@@ -84,7 +116,7 @@ function Product(name, path){
     return Math.floor(Math.random() * allProducts.length );
  }
 
-
+ 
  //////////////////////
  var numberOfTrials = 25;
     function productClickHandler(){
@@ -92,15 +124,17 @@ function Product(name, path){
             
             var clickedElement = event.target;
 
-            
+            // var  n = numberOfTimesShown.includes(allProducts.name);
+            // console.log('mar' + n);
             var clickedElementId = clickedElement.id;
             
             if(clickedElementId === 'product1' || clickedElementId === 'product2' || clickedElementId === 'product3'){
                 totalClicks +=1;
                
-    
+                
                 if(clickedElementId === 'product1'){
                     allProducts[leftImageIndex].numberOfClicks +=1;
+                 
                 }
     
                 if(clickedElementId === 'product2'){
@@ -111,14 +145,21 @@ function Product(name, path){
                 }
     
                 generateRandomImage();
-                console.log(allProducts);
-    
+               // console.log(allProducts);
+                
             }
         } else {
+            populateNumberOfClicksArr();
+            shown();
             generateUserMessage();
+            // generateChart();
+            generateChart2();
+           
             productsSection.removeEventListener('click', productClickHandler);
         }
+            
     }
+
 //////////////
 function generateUserMessage(){
     var ulElement = document.getElementById('finalResult');    
@@ -129,4 +170,68 @@ function generateUserMessage(){
         ulElement.appendChild(listItem);
     }
 
+}
+
+//////////////
+var numberOfClicks=[];
+function populateNumberOfClicksArr(){
+    for (let index = 0; index < allProducts.length; index++) {
+        numberOfClicks.push(allProducts[index].numberOfClicks);   
+    }
+}
+var numberOfTimesShown=[];
+function shown(){
+    for (let r = 0; r < allProducts.length; r++) {
+        numberOfTimesShown.push(allProducts[r].numberOfTimesShown );   
+    }
+}
+
+////////////// number of times viewed 
+function generateChart2(){
+    var ctx = document.getElementById('myChart2').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+       labels:productsName,
+        datasets: [{
+          label: '# of times viewed',
+          data:  numberOfTimesShown,
+          backgroundColor:  'orange',
+  
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 100, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 200, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        },{
+            label: '# of Votes',
+            data:  numberOfClicks,
+            backgroundColor: 'black',
+          
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }
+    ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
 }
