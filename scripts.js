@@ -152,10 +152,12 @@ function Product(name, path){
             populateNumberOfClicksArr();
             shown();
             generateUserMessage();
-            // generateChart();
+            storeOurProducts();
             generateChart2();
-           
+            
             productsSection.removeEventListener('click', productClickHandler);
+            console.table(allProducts);
+            console.table(localStorage);
         }
             
     }
@@ -185,7 +187,43 @@ function shown(){
         numberOfTimesShown.push(allProducts[r].numberOfTimesShown );   
     }
 }
+function populateNumberOfClicksArr(){
+  for (let index = 0; index < allProducts.length; index++) {
+      numberOfClicks.push(allProducts[index].numberOfClicks);   
+  }
+}
 
+
+function storeOurProducts(){
+// in order to save our array of objects into the localstorage we will need to formate our json object in json string
+var jsonStringProducts = JSON.stringify(allProducts);
+// creare a new property in our localstorage 
+localStorage.setItem('products',jsonStringProducts);
+}
+console.log('inital');
+console.table(allProducts);
+parseLocalStorage();
+console.log('after updating');
+console.table(allProducts);
+// this function is responsible for parsing the json string to json object 
+function parseLocalStorage(){
+var previousProductsArr =JSON.parse(localStorage.getItem('products'))
+console.log(previousProductsArr);
+// this funtcion will update the newly created objects with the old literation values
+update(previousProductsArr);
+
+}
+function update(previousProductsArr){
+for (let index = 0; index < allProducts.length; index++) {
+  
+ console.log(  "hello"+ allProducts);
+ console.log('hi' +previousProductsArr  );
+  allProducts[index].numberOfClicks = previousProductsArr[index].numberOfClicks;
+  allProducts[index].numberOfTimesShown = previousProductsArr[index].numberOfTimesShown;
+  
+
+}
+}
 ////////////// number of times viewed 
 function generateChart2(){
     var ctx = document.getElementById('myChart2').getContext('2d');
