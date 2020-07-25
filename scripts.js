@@ -1,6 +1,6 @@
 
 'use strict';
-
+// declare all variables
 var productsSection = document.getElementById('allProducts');
 var allProducts = [];
 
@@ -12,7 +12,7 @@ var rightImageIndex;
 var productsName = [];
 allProducts.lastShown = [];
 var array1=[];
-
+// create a constructor
 function Product(name, path){
     this.name = name;
     this.path = path;
@@ -22,7 +22,7 @@ function Product(name, path){
     allProducts.push(this);
     productsName.push(this.name);
  }
-
+// add new objects
  new Product('Bag', 'img/bag.jpg');
  new Product('Banana', 'img/banana.jpg');
  new Product('bathroom', 'img/bathroom.jpg');
@@ -42,16 +42,17 @@ function Product(name, path){
  new Product(' tale usb ', 'img/usb.gif');
  new Product('water can', 'img/water-can.jpg'); 
  new Product('wine glass', 'img/wine-glass.jpg'); 
-
+//call the function
  generateRandomImage();
 
 ////////////////////
-
+// event listener to call function when event clicking heppens
  productsSection.addEventListener('click', productClickHandler)
 
 
 
  ////////////////////
+ //function to generate images
  function generateRandomImage(){
      
      var leftImage = document.getElementById('product1');
@@ -65,7 +66,7 @@ function Product(name, path){
      var num = array1.includes(rightImageIndex);
      var n = num.toString();
     console.log(array1);
-
+// while loop to check for repeating
      while (leftImageIndex === rightImageIndex || leftImageIndex === middleImageIndex || rightImageIndex === middleImageIndex  || array1.includes(leftImageIndex)
      || array1.includes(middleImageIndex)
      ||array1.includes(rightImageIndex)){
@@ -93,18 +94,7 @@ function Product(name, path){
      array1[2] = middleImageIndex;
      console.log(array1+' yes')
      
-    //  var namy =[];
-    //  var namy2=[];
-    //  namy.push( allProducts[leftImageIndex].name);
-    // //  var namy= allProducts[leftImageIndex].name;
-    //  console.log(namy + 'me')
-    // namy2.push(allProducts[leftImageIndex].name);
-    
-    //  if (namy===namy2) {
-    //     leftImageIndex = generateRandomNumber(); 
-         
-    //  }
-
+  
 
      leftImage.setAttribute('src', leftPath);
      middleImage.setAttribute('src', middlePath);
@@ -112,12 +102,14 @@ function Product(name, path){
  
  }
  ///////////////////
+ //ro generate random number
  function generateRandomNumber(){
     return Math.floor(Math.random() * allProducts.length );
  }
 
  
  //////////////////////
+ //the function that will be called when clicking happens
  var numberOfTrials = 25;
     function productClickHandler(){
         if (totalClicks < numberOfTrials ){
@@ -163,6 +155,7 @@ function Product(name, path){
     }
 
 //////////////
+//generate user message when voting finishes
 function generateUserMessage(){
     var ulElement = document.getElementById('finalResult');    
     
@@ -175,6 +168,7 @@ function generateUserMessage(){
 }
 
 //////////////
+//calculate the number of clicks , times shown by using for statements
 var numberOfClicks=[];
 function populateNumberOfClicksArr(){
     for (let index = 0; index < allProducts.length; index++) {
@@ -193,7 +187,7 @@ function populateNumberOfClicksArr(){
   }
 }
 
-
+//to make a local storage
 function storeOurProducts(){
 // in order to save our array of objects into the localstorage we will need to formate our json object in json string
 var jsonStringProducts = JSON.stringify(allProducts);
@@ -224,6 +218,7 @@ for (let index = 0; index < allProducts.length; index++) {
 
 }
 }
+// charts to view # of times shown and clicked
 ////////////// number of times viewed 
 function generateChart2(){
     var ctx = document.getElementById('myChart2').getContext('2d');
